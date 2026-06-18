@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маджонг · Flexbox & Grid</title>
+    <style>
+        /* ——— общие сбросы и шрифты ——— */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f7f4f0;
+            color: #1e1e1e;
+            padding: 0 24px 40px;
+            line-height: 1.6;
+        }
+
+        /* ——— навигация (как в исходнике, но адаптивно) ——— */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #f0ebe3;
+            border-bottom: 2px solid #d8cfc4;
+            padding: 12px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 32px;
+            z-index: 100;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        nav a {
+            text-decoration: none;
+            color: #2d2a26;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.15s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 3px;
+        }
+        nav a:hover {
+            border-bottom-color: #b8a28b;
+            color: #000;
+        }
+
+        body {
+            padding-top: 80px; /* отступ под фиксированную навигацию */
+        }
+
+        /* ——— общие отступы для секций ——— */
+        section {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            background: #ffffffcc;
+            backdrop-filter: blur(1px);
+            padding: 30px 35px;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            transition: 0.2s;
+            border: 1px solid #f0e8df;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #2b241c;
+        }
+        h1 { font-size: 2.4rem; margin-bottom: 0.3rem; }
+        h2 { font-size: 1.9rem; margin: 0 0 0.6rem; border-left: 6px solid #c9b6a2; padding-left: 16px; }
+        h3 { font-size: 1.3rem; margin: 1.2rem 0 0.5rem; color: #3d342b; }
+
+        p {
+            margin: 0.8rem 0;
+            max-width: 75ch;
+        }
+
+        ul {
+            margin: 0.6rem 0 1rem 1.8rem;
+        }
+        li {
+            margin-bottom: 0.25rem;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 18px;
+            margin: 16px 0 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        footer {
+            max-width: 1100px;
+            margin: 20px auto 10px;
+            padding: 12px 0 8px;
+            border-top: 1px solid #d8cfc4;
+            font-size: 0.9rem;
+            color: #5b4f42;
+            text-align: center;
+        }
+
+        /* ——— FLEXBOX-РАЗДЕЛ (история) ——— */
+        .flex-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px 30px;
+            margin: 18px 0 6px;
+        }
+
+        .flex-card {
+            flex: 1 1 260px;
+            background: #faf7f2;
+            padding: 20px 22px;
+            border-radius: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #ede7df;
+            transition: 0.1s;
+        }
+        .flex-card h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            border-left: 4px solid #b8a28b;
+            padding-left: 12px;
+        }
+        .flex-card p {
+            margin: 0.4rem 0 0;
+            font-size: 0.98rem;
+        }
+
+        /* ——— GRID-РАЗДЕЛ (общие правила + отличия) ——— */
+        .grid-section {
+            display: block;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px 32px;
+            margin: 20px 0 8px;
+        }
+
+        .grid-item {
+            background: #faf7f2;
+            padding: 22px 24px;
+            border-radius: 24px;
+            border: 1px solid #ede7df;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+        }
+        .grid-item h3 {
+            margin: 0 0 0.4rem;
+            font-size: 1.25rem;
+            border-left: 4px solid #b8a28b;
+            padding-left: 12px;
+        }
+        .grid-item p, .grid-item ul {
+            margin: 0.4rem 0;
+            font-size: 0.98rem;
+        }
+        .grid-item ul {
+            padding-left: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .grid-item .highlight {
+            background: #ede7df;
+            border-radius: 40px;
+            padding: 4px 14px;
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            color: #3d342b;
+            margin-top: 8px;
+            align-self: flex-start;
+        }
+
+        /* ——— адаптивные мелочи ——— */
+        @media (max-width: 600px) {
+            section { padding: 20px 18px; }
+            nav { gap: 10px 20px; padding: 10px 16px; }
+            nav a { font-size: 0.85rem; }
+            h1 { font-size: 1.9rem; }
+            h2 { font-size: 1.6rem; }
+        }
+
+        /* картинка в flex‑секции (чтобы не разрывалась) */
+        .flex-img-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .flex-img-wrap img {
+            max-width: 100%;
+            width: 380px;
+            border-radius: 24px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <nav>
+        <a href="#mainpage">В начало</a>
+        <a href="#history">История</a>
+        <a href="#riichi">Риичи Маджонг</a>
+        <a href="#rules">Общие правила</a>
+        <a href="#diff">Отличия риичи</a>
+    </nav>
+
+
+    <section id="mainpage">
+        <h1>Маджонг</h1>
+        <p>
+           Маджо́нг или мацзян — китайская азартная игра с использованием игральных костей для четырёх игроков (каждый играет за себя). Широко распространена в Китае, Японии и других странах Восточной и Юго-Восточной Азии.
+        </p>
+        <p>
+            Игра ведётся костями, напоминающими костяшки домино, по правилам подобна покеру, требует от играющих таких качеств, как опыт, память и наблюдательность.
+        </p>
+        <p>
+            В игре присутствует также случайный фактор, роль которого, в зависимости от используемых игровых правил, может быть как малой, так и решающей. Цель игры — набрать как можно большее количество очков, собрав наиболее ценную комбинацию из заданного количества костей.
+        </p>
+        <div style="margin-top: 16px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Mahjong_game.jpg/330px-Mahjong_game.jpg" alt="Игра в маджонг" style="max-width:100%; border-radius:20px;">
+        </div>
+    </section>
+
+
+    <section id="history" class="flex-section">
+        <h2>Появление игры</h2>
+        <p style="max-width: 80ch;">
+            Несмотря на множество мифов, в действительности маджонг — молодая игра, её возраст вряд ли превышает полтора века. Во всяком случае, нет никаких объективных доказательств существования маджонга в его нынешнем виде или его близких аналогов до середины XIX века. 
+        </p>
+        <p>
+            Есть достаточно оснований считать, что игра появилась в одной из провинций вокруг городов Ханчжоу, Нанкин, Шанхай и Нинбо. Прослеживается связь правил маджонга с правилами карточных игр, имевших хождение в Китае в начале XIX века.
+        </p>
+
+        <!-- Flex‑контейнер с карточками -->
+        <div class="flex-grid">
+            <div class="flex-card">
+                <h3>Ма-Дяо</h3>
+                <p>Непосредственный предшественник — популярная карточная игра <strong>Ма-Дяо</strong> (馬吊). В ней использовалось 40 бумажных карт, четыре масти от 1 до 9 и четыре цветочные карты, что напоминает современные кости маджонга.</p>
+            </div>
+            <div class="flex-card">
+                <h3>Тайпины</h3>
+                <p>По одной из теорий, создателями игры были офицеры китайской армии во время восстания тайпинов, придумавшие маджонг, чтобы коротать время в походах.</p>
+            </div>
+            <div class="flex-card">
+                <h3>Шанхайский след</h3>
+                <p>Другая версия приписывает создание игры некоему дворянину из окрестностей Шанхая (между 1870 и 1875 годами). Оттуда игра быстро распространилась по Китаю и миру.</p>
+            </div>
+            <div class="flex-card">
+                <h3>Мировая волна</h3>
+                <p>К 1920 году маджонг уже считался национальной игрой Китая и был известен в Америке и Европе. К XX веку игра стала неотъемлемой частью азиатской культуры.</p>
+            </div>
+        </div>
+	<p style="margin-top: 8px;">Кости маджонга — отражение многовековой традиции</p>
+
+        <div class="flex-img-wrap">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/MJTiles_Fullset.png/330px-MJTiles_Fullset.png" alt="Кости маджонга">
+        </div>
+    </section>
+
+
+    <section id="riichi">
+        <h2>Риичи Маджонг</h2>
+        <p>
+            В Японию маджонг попал из Китая в 1907 году. Как и в Китае, к 1920-м годам игра распространилась повсеместно и была очень популярна. В период 1937—1945 годов маджонг был официально запрещён, но после войны быстро вернул свои позиции.
+        </p>
+        <p>
+            В 1950-х годах создана Японская Ассоциация Маджонга, выпустившая свод официальных правил. К 2007 году ассоциация насчитывала около 20 000 игроков.
+        </p>
+        <p>
+            <strong>Риичи (ричи)</strong> — объявление игроком обязательства собрать выигрышную комбинацию с депозитом 1000 очков, а также использование <strong>дор</strong> — специальных костей, увеличивающих стоимость руки. Часть игроков в России используют название «риичи-маджонг» от англ. <em>to reach</em> — достигать.
+        </p>
+    </section>
+
+    <section id="rules" class="grid-section">
+        <h2>Общие правила и отличия риичи</h2>
+        <p style="max-width: 80ch; margin-bottom: 10px;">
+            В разных правилах детали различаются, иногда существенно. Здесь — общая схема и ключевые особенности японского риичи.
+        </p>
+
+
+        <div class="grid-container">
+
+            <div class="grid-item">
+                <h3>Общие положения</h3>
+                <ul>
+                    <li>Играют 4 игрока, каждый против всех (есть модификации для троих).</li>
+                    <li>Игра состоит из сессий, раундов и раздач. Количество определяется заранее.</li>
+                    <li>Кости перемешиваются, выкладывается «стена» в виде квадрата.</li>
+                    <li>Броском костей определяется место разрыва стены.</li>
+                </ul>
+                <span class="highlight">основа</span>
+            </div>
+
+
+            <div class="grid-item">
+                <h3>Раздача и сеты</h3>
+                <ul>
+                    <li><strong>Чоу</strong> — три последовательных кости одной масти.</li>
+                    <li><strong>Панг</strong> — три одинаковых кости (номинал+масть, или драконы/ветра).</li>
+                    <li><strong>Конг</strong> — четыре одинаковых кости.</li>
+                    <li>Игроки ходят против часовой стрелки, дилер ходит первым.</li>
+                    <li>Побеждает тот, кто первым соберёт выигрышную руку («Маджонг»).</li>
+                </ul>
+                <span class="highlight">комбинации</span>
+            </div>
+
+
+            <div class="grid-item">
+                <h3>Завершение</h3>
+                <p>Раздача завершается, когда один из игроков объявляет выигрышную комбинацию, либо когда заканчиваются кости в стене. Игрок может открыть сет (чоу, панг, конг) и получить дополнительные очки. При конге игрок берёт дополнительную кость.</p>
+                <span class="highlight">финал</span>
+            </div>
+
+
+            <div class="grid-item" id="diff">
+                <h3>Отличия риичи</h3>
+                <ul>
+                    <li>Используется комплект из <strong>136 костей</strong> (без цветов, времён года и джокеров).</li>
+                    <li><strong>Риити</strong> — объявление с депозитом 1000 очков.</li>
+                    <li><strong>Дора</strong> — специальные кости, увеличивающие стоимость выигрыша.</li>
+                    <li>По договорённости — <strong>ака-доры</strong> (красные «пятёрки»), которые добавляют до 4 дополнительных дор.</li>
+                    <li>Особая система подсчёта очков (фу, хан).</li>
+                </ul>
+                <span class="highlight">японский стиль</span>
+            </div>
+
+
+            <div class="grid-item">
+                <h3>Нюансы правил</h3>
+                <p><strong>«Необъявленный конг — не конг»</strong> — конгом признаётся только объявленная четвёрка. Также действует правило: на первом ходе дилер не берёт кость из стены, а сразу сбрасывает одну из 14 костей.</p>
+                <p style="margin-top: 6px;">Игрок может не объявлять выигрыш, чтобы набрать больше очков в будущем, но тогда он «ломает» руку.</p>
+                <span class="highlight">тактика</span>
+            </div>
+        </div>
+
+        <p style="margin-top: 20px; font-size: 0.98rem; background: #f1ebe3; padding: 10px 18px; border-radius: 40px; display: inline-block;">
+            В риичи важны не только комбинации, но и «дора»-бонусы, что делает игру более динамичной и стратегической.
+        </p>
+    </section>
+
+    <footer>
+        <p>(с) 2026,</p>
+    </footer>
+
+</body>
+</html>
